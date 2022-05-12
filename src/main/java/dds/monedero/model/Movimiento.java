@@ -31,6 +31,7 @@ public class Movimiento {
   public boolean fueExtraido(LocalDate fecha) {
     return isExtraccion() && esDeLaFecha(fecha);
   }
+  // fueDepositado y fueExtraido utilizan la misma logica
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
@@ -43,6 +44,7 @@ public class Movimiento {
   public boolean isExtraccion() {
     return !esDeposito;
   }
+  // Metodo de más, se puede refactorizar utilizando isDeposito
 
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
