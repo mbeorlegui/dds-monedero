@@ -26,7 +26,7 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
-  public void poner(double cuanto) {
+  public void poner(double cuanto) {  // Long method, delegar validaciones a otro metodo
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -38,7 +38,8 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
-  public void sacar(double cuanto) { // variable "cuanto" es poco expresiva, mejor utilizar "monto"
+  public void sacar(double cuanto) {  // Long method, delegar validaciones a otro metodo
+    // variable "cuanto" es poco expresiva, mejor utilizar "monto"
     // TODO: Pasar validaciones a constructor
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
@@ -55,14 +56,14 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
+  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {  // Long parameter list 
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha)) // Aca conviene utilizar la abstraccion fueExtraido(fecha)
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }

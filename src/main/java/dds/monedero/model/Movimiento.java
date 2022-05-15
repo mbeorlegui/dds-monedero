@@ -55,7 +55,7 @@ public class Movimiento {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
     } else {
-      return cuenta.getSaldo() - getMonto();
+      return cuenta.getSaldo() - getMonto(); // Repeticion de logica
     }
   }
 }
