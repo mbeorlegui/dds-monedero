@@ -52,10 +52,12 @@ public class Movimiento {
   }
 
   public double calcularValor(Cuenta cuenta) {
+    double variacion = 0;
     if (esDeposito) {
-      return cuenta.getSaldo() + getMonto();
+      variacion += getMonto();
     } else {
-      return cuenta.getSaldo() - getMonto(); // Repeticion de logica
+      variacion -= getMonto();
     }
+    return cuenta.getSaldo() + variacion;
   }
 }
