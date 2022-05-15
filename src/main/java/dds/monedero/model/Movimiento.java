@@ -44,7 +44,6 @@ public class Movimiento {
   public boolean isExtraccion() {
     return !esDeposito;
   }
-  // Metodo de más, se puede refactorizar utilizando isDeposito
 
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
