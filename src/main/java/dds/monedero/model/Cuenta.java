@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Cuenta {
 
-  private double saldo = 0; // Ya se inicializa en 0 por defecto
+  private double saldo;
   private List<Movimiento> movimientos = new ArrayList<>();
 
   public Cuenta() {
@@ -26,7 +26,7 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
-  public void poner(double monto) {  // Long method, delegar validaciones a otro metodo
+  public void poner(double monto) {
     validarPoner(monto);
     new Movimiento(LocalDate.now(), monto, true).agregateA(this);
   }
@@ -66,7 +66,7 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), monto, false).agregateA(this);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {  // Long parameter list 
+  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {  // Long parameter list
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
   }
