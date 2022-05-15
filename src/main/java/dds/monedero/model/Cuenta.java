@@ -28,7 +28,7 @@ public class Cuenta {
 
   public void poner(double monto) {
     validarPoner(monto);
-    new Movimiento(LocalDate.now(), monto, true).agregateA(this);
+    new Deposito(LocalDate.now(), monto).agregateA(this);
   }
 
   public void validarMontoPositivo(double monto){
@@ -63,17 +63,16 @@ public class Cuenta {
   }
   public void sacar(double monto) {
     validarSacar(monto);
-    new Movimiento(LocalDate.now(), monto, false).agregateA(this);
+    new Extraccion(LocalDate.now(), monto).agregateA(this);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {  // Long parameter list
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> movimiento.fueExtraido(fecha))
+        .filter(movimiento -> movimiento.esDeLaFecha(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
