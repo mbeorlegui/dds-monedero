@@ -44,26 +44,26 @@ public class Cuenta {
       throw new MaximaCantidadDepositosException("Ya excedio los " + depositosDiarios + " depositos diarios");
     }
   }
+  public void validarSacar(double monto) {
+    validarMontoPositivo(monto);
+    int limiteDiario = 1000;
+    if (getSaldo() < monto) {
+      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+    }
+    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+    double limiteActual = limiteDiario - montoExtraidoHoy;
+    if (monto > limiteActual) {
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + limiteDiario
+          + " diarios, límite actual es: " + limiteActual);
+    }
+  }
 
   public int getCantidadDepositos(){
     return (int) this.getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count();
   }
-  public void sacar(double cuanto) {  // Long method, delegar validaciones a otro metodo
-    // variable "cuanto" es poco expresiva, mejor utilizar "monto"
-    // TODO: Pasar validaciones a constructor
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-    if (getSaldo() - cuanto < 0) {  // Deberia comparar el getSaldo con la variable cuanto (getSaldo() < cuanto)
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;  // Asignar a una variable limiteDiario el 1000, asi aporta flexibilidad al modelo
-    if (cuanto > limite) {  // Cambiar nombre limite por limiteActual -> aporta expresividad al codigo
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000  // Reemplazar 1000 por limiteDiario
-          + " diarios, límite: " + limite);
-    }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+  public void sacar(double monto) {
+    validarSacar(monto);
+    new Movimiento(LocalDate.now(), monto, false).agregateA(this);
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {  // Long parameter list 
