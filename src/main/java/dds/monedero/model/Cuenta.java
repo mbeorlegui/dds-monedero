@@ -26,16 +26,23 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
-  public void poner(double cuanto) {  // Long method, delegar validaciones a otro metodo
-    int depositosDiarios = 3;
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+  public void poner(double monto) {  // Long method, delegar validaciones a otro metodo
+    validarPoner(monto);
+    new Movimiento(LocalDate.now(), monto, true).agregateA(this);
+  }
+
+  public void validarMontoPositivo(double monto){
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
     }
+  }
+
+  public void validarPoner(double monto) {
+    validarMontoPositivo(monto);
+    int depositosDiarios = 3;
     if (this.getCantidadDepositos() >= depositosDiarios) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + depositosDiarios + " depositos diarios");
     }
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
   public int getCantidadDepositos(){
