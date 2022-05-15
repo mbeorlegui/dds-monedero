@@ -27,17 +27,20 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {  // Long method, delegar validaciones a otro metodo
+    int depositosDiarios = 3;
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) { // Condicion poco expresiva. Reemplazar el 3 en una variable depositosDiarios
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios"); // Reemplazar el 3 en una variable depositosDiarios
+    if (this.getCantidadDepositos() >= depositosDiarios) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + depositosDiarios + " depositos diarios");
     }
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
+  public int getCantidadDepositos(){
+    return (int) this.getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count();
+  }
   public void sacar(double cuanto) {  // Long method, delegar validaciones a otro metodo
     // variable "cuanto" es poco expresiva, mejor utilizar "monto"
     // TODO: Pasar validaciones a constructor
